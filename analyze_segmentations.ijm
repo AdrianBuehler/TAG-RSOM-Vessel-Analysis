@@ -1,4 +1,4 @@
-// This macro expects segmented images and a analysis-area-file (.roi). Files should be placed in one in "Segmentation" folder 
+// This macro analyzes segmented iamges. It expects segmented images (.tif) and a file containing the analysis-area (.roi) located in one folder.
 
 
 #@ File (style="directory", value="C:/Segmentation") source
