@@ -10,8 +10,11 @@ This software uses the ImageJ distribution Fiji (https://imagej.net/software/fij
 
 1.  Organize your reconstructed volumes.tif in a source folder.
 2.  Run `preprocessing_and_segmentation.ijm` in Fiji and save output in a folder "Processed".
-3.  Run `analyse_segmentations.ijm` in Fiji and save output in a folder "Analysis".
+3.  Run `analyze_segmentations.ijm` in Fiji and save output in a folder "Analysis".
 4.  Run `descriptors_calculation.ipynb`
+
+<img src="pipeline.png" alt="Murine colon vessels." width="100%" />
+
 
 
 
