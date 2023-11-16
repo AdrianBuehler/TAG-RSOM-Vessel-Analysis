@@ -1,6 +1,6 @@
 # TAG-RSOM-Vessel-Analysis
 
-This pipeline enables the quantification of colon vessels in mice imaged with TAG-RSOM and is associated with the study: (AUTHOR, TITLE, JOURNAL, YEAR, DOI)
+This pipeline enables the quantification of colon vessels in mice imaged with TAG-RSOM. For a more detailed description read the work associated with this repository (AUTHOR, TITLE, JOURNAL, YEAR, DOI)
 
 ## Requirements for running the code
 
