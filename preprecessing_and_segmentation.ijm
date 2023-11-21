@@ -342,7 +342,8 @@ function crop_and_project_to2D(img) {
 	run("Duplicate...", "duplicate");
 	close("fetch");	
 	rename("fetch");	
-	
+
+/*
 	// Filter in the FFT domain to eliminate horizontal line artefacts
 	run("FFT");
 	close("fetch");	
@@ -361,6 +362,7 @@ function crop_and_project_to2D(img) {
 	run("Inverse FFT");
 	close("fetch_fft");
 	rename("fetch_ifft");
+*/
 	
 	// remove BG
 	run("Gaussian Blur...", "sigma=1");
