@@ -241,6 +241,7 @@ function get_apex_coordinates(img){
 	Table.setColumn("segsize", ssize);
 	saveAs("Results", OUTPUT + img + APEX_RES_SUF);
 	close(img + APEX_RES_SUF);
+	close("Results");
 }
 
 
