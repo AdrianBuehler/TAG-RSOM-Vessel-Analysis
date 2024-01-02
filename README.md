@@ -6,12 +6,11 @@ This pipeline enables the quantification of colon vessels in mice imaged with TA
 
 This software uses the ImageJ distribution Fiji (https://imagej.net/software/fiji/downloads) and Jupyter (https://jupyter.org/install).
 
-## Pipeline
+## How to:
 
-1.  Organize your reconstructed volumes.tif in a source folder.
-2.  Run `preprocessing_and_segmentation.ijm` in Fiji and save output in a folder "Processed".
-3.  Run `analyze_segmentations.ijm` in Fiji.
-4.  Run `descriptors_calculation.ipynb` to fetch Fiji results and calculate descriptors.
+1.  Organize your reconstructed volumes.tif in a input folder.
+2.  Run `main.ijm` in Fiji.
+3.  Run `descriptors_calculation.ipynb` to fetch results and calculate descriptors.
 
 <img src="example.png" alt="Murine colon vessels." width="100%" />
 
