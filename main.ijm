@@ -30,10 +30,9 @@ AREA_RES_SUF = "_SegmentedArea.csv";
 DM_RES_SUF = "_DistanceMap.csv";
 BC_RES_SUF = "_BoxCount.csv";
 
+//******************************************************************************
 // Projection type
 PROJ_TYPE = "Average Intensity"; // "Max Intensity"
-
-//******************************************************************************
 // MAGIC NUMBERS:
 SEGMENT_SIZE = 50;
 // voxelsize: 20x20x4; TAG diameter 3mm + safety margin = Magic Numbers
@@ -48,15 +47,14 @@ CROP_HEIGHT = 50;
 THETA = 2;
 //******************************************************************************
 
-
-
-
 main();
 
-
 function main() {
-	run("Text Window...", "name=[TAG-RSOM Vessel Analysis] width=186 height=30 monospaced");
-	print("[TAG-RSOM Vessel Analysis]","  _________   ______      ____ _____ ____  __  ___   _    __                    __   ___                __           _         \n /_  __/   | / ____/     / __ / ___// __ \\/  |/  /  | |  / ___  _____________  / /  /   |  ____  ____ _/ __  _______(______    \n  / / / /| |/ / ________/ /_/ \\__ \\/ / / / /|_/ /   | | / / _ \\/ ___/ ___/ _ \\/ /  / /| | / __ \\/ __ `/ / / / / ___/ / ___/    \n / / / ___ / /_/ /_____/ _, ____/ / /_/ / /  / /    | |/ /  __(__  (__  /  __/ /  / ___ |/ / / / /_/ / / /_/ (__  / (__  )     \n/_/ /_/  |_\\____/     /_/ |_/____/\\____/_/  /_/     |___/\\___/____/____/\\___/_/  /_/  |_/_/ /_/\\__,_/_/\\__, /____/_/____/      \n                                                                                                      /____/                   \n\n");
+	if(isOpen("TAG-RSOM Vessel Analysis") == false){
+		run("Text Window...",
+			"name=[TAG-RSOM Vessel Analysis] width=186 height=25 monospaced");
+		print("[TAG-RSOM Vessel Analysis]","  _________   ______      ____ _____ ____  __  ___   _    __                    __   ___                __           _         \n /_  __/   | / ____/     / __ / ___// __ \\/  |/  /  | |  / ___  _____________  / /  /   |  ____  ____ _/ __  _______(______    \n  / / / /| |/ / ________/ /_/ \\__ \\/ / / / /|_/ /   | | / / _ \\/ ___/ ___/ _ \\/ /  / /| | / __ \\/ __ `/ / / / / ___/ / ___/    \n / / / ___ / /_/ /_____/ _, ____/ / /_/ / /  / /    | |/ /  __(__  (__  /  __/ /  / ___ |/ / / / /_/ / / /_/ (__  / (__  )     \n/_/ /_/  |_\\____/     /_/ |_/____/\\____/_/  /_/     |___/\\___/____/____/\\___/_/  /_/  |_/_/ /_/\\__,_/_/\\__, /____/_/____/      \n                                                                                                      /____/                   \n\n");
+	}
 
 	// Get file list
 	imgs = getFileList(SOURCE);
@@ -72,7 +70,8 @@ function main() {
 	for (i = 0; i < lengthOf(imgs); i++) {
    		// Filter volume
 		if (File.exists(OUTPUT+imgs[i]+FILT3D_IMG_SUF) == false || ignfilter) {
-   			print("[TAG-RSOM Vessel Analysis]", "\nFiltering image:                  " + imgs[i]);
+   			print("[TAG-RSOM Vessel Analysis]",
+   				"\nFiltering image:                  " + imgs[i]);
 			filter_3D_volume(imgs[i]);
 		}
 	}
@@ -80,7 +79,8 @@ function main() {
 	for (i = 0; i < lengthOf(imgs); i++) {
 		// Get colon outline
 		if (File.exists(OUTPUT+imgs[i]+APEX_RES_SUF) == false || ignapex) {
-   			print("[TAG-RSOM Vessel Analysis]", "\nManual TAG segmentation:          " + imgs[i]);
+   			print("[TAG-RSOM Vessel Analysis]",
+   				"\nManual TAG segmentation:          " + imgs[i]);
 			get_apex_coordinates(imgs[i]);
 		}
 	}
@@ -89,27 +89,30 @@ function main() {
 		// Crop volume and create 2D projection
 		if (File.exists(OUTPUT+imgs[i]+ PREPROC_IMG_SUF) == false || 
 			(igncrop || ignapex || ignfilter)) {
-   			print("[TAG-RSOM Vessel Analysis]", "\nCropping:                         " + imgs[i]);
+   			print("[TAG-RSOM Vessel Analysis]",
+   				"\nCropping:                         " + imgs[i]);
 			crop_and_project_to2D(imgs[i]);
 		}
 		
 		// Segment
 		if (File.exists(OUTPUT+imgs[i]+ SEG_IMG_SUF) == false ||
 			(ignseg || ignfilter || igncrop || ignapex)) {
-   			print("[TAG-RSOM Vessel Analysis]", "\nSegmentation (Frangi vesselness): " + imgs[i]);
+   			print("[TAG-RSOM Vessel Analysis]",
+   				"\nSegmentation (Frangi vesselness): " + imgs[i]);
 			segment(imgs[i]);
 		}
 		
 		// Calc res
 		if (File.exists(OUTPUT+imgs[i]+SKEL_RES_SUF) == false || ignres) {
-   			print("[TAG-RSOM Vessel Analysis]", "\nAnalyse skeleton:                 " + imgs[i]);
+   			print("[TAG-RSOM Vessel Analysis]",
+   				"\nAnalyse skeleton:                 " + imgs[i]);
 			analyse(imgs[i]);
 		} 
 	}
 	
 	
-	print("[TAG-RSOM Vessel Analysis]", "\n\n\n\n* * * * * * * *\n" +
-		      "*  Finished   *\n* * * * * * * *\n");
+	print("[TAG-RSOM Vessel Analysis]", "\n\n* * * * * * * *\n" +
+		      "*  Finished   *\n* * * * * * * *\n\n");
 }
 
 function filter_3D_volume(img){
@@ -166,7 +169,6 @@ function get_apex_coordinates(img){
 		}
 	}
 
-	
 	close("coronal_view");
 	close("sideViewMIPtemplate");
 	run("Fire");
@@ -185,9 +187,7 @@ function get_apex_coordinates(img){
 	run("Measure");
 	close("MIPs of segments of size " + SEGMENT_SIZE + " of image "	+ img);
 
-//******************************************************************************
-	
-	// Check user input
+// Check user input ************************************************************
 	if (nResults() <= 1) {
 		close("Results");
 		exit("No apicies were selected.");
@@ -218,11 +218,7 @@ function get_apex_coordinates(img){
 		}
 	}
 	
-	
-	
-//******************************************************************************
-	// Interpolate the coordinates
-
+// Interpolate the coordinates *************************************************
 	// Convert table into array
 	x_TAG = newArray(0);
 	y_TAG = newArray(0);
@@ -238,15 +234,14 @@ function get_apex_coordinates(img){
 		}
 	}
 	
-	
-	// Interpolation
+	// Interpolate array
 	x_TAG_ip = Array.resample(x_TAG, ((nResults()/2)-1)*SEGMENT_SIZE);
 	y_TAG_ip = Array.resample(y_TAG, ((nResults()/2)-1)*SEGMENT_SIZE);
 	x_tissue_ip = Array.resample(x_tissue, ((nResults()/2)-1)*SEGMENT_SIZE);
 	y_tissue_ip = Array.resample(y_tissue, ((nResults()/2)-1)*SEGMENT_SIZE);
 	
-	
-	// extending arrays with first/last value by 1/2 SEGMENT_SIZE instaed of extrapolation
+	// extending arrays with first/last value by 1/2 SEGMENT_SIZE instaed of
+	// extrapolation
 	x_TAG_ip_exp = newArray(SEGMENT_SIZE/2);
 	Array.fill(x_TAG_ip_exp, x_TAG_ip[0]);
 	x_TAG_ip_exp = Array.concat(x_TAG_ip_exp, x_TAG_ip);
@@ -262,16 +257,15 @@ function get_apex_coordinates(img){
 	x_tissue_ip_exp = newArray(SEGMENT_SIZE/2);
 	Array.fill(x_tissue_ip_exp, x_tissue_ip[0]);
 	x_tissue_ip_exp = Array.concat(x_tissue_ip_exp, x_tissue_ip);
-	for (i = lengthOf(x_tissue_ip_exp); i < ((nResults()/2)*SEGMENT_SIZE); i++) {
+	for (i = lengthOf(x_tissue_ip_exp); i < ((nResults()/2)*SEGMENT_SIZE); i++){
 		x_tissue_ip_exp[i] = x_tissue_ip[lengthOf(x_tissue_ip)-1];
 	}
 	y_tissue_ip_exp = newArray(SEGMENT_SIZE/2);
 	Array.fill(y_tissue_ip_exp, y_tissue_ip[0]);
 	y_tissue_ip_exp = Array.concat(y_tissue_ip_exp, y_tissue_ip);
-	for (i = lengthOf(y_tissue_ip_exp); i < ((nResults()/2)*SEGMENT_SIZE); i++) {
+	for (i = lengthOf(y_tissue_ip_exp); i < ((nResults()/2)*SEGMENT_SIZE); i++){
 		y_tissue_ip_exp[i] = y_tissue_ip[lengthOf(y_tissue_ip)-1];
 	}
-	
 	
 	// Save coordinates
 	start = newArray(1); start[0] = getResult("Slice", 1)-1;
@@ -300,13 +294,16 @@ function crop_and_project_to2D(img) {
 	rename("fetch");
 	run("Duplicate...", "duplicate range="
 		+ getResult("start", 0)*getResult("segsize", 0) + "-"
-		+ getResult("stop", 0)*getResult("segsize", 0)+getResult("segsize", 0)-1);		
+		+ getResult("stop", 0)*getResult("segsize", 0)
+		+ getResult("segsize", 0)-1);		
 	close("fetch");
 	rename("cropped_image");
 	// Crop volume
 	getDimensions(width, height, channels, slices, frames);
 	// Apply to dummy to save presice outline (calculation internsive but works)
 	newImage("dummy", "8-bit white", width, height, slices);
+	setForegroundColor(255, 255, 255);
+	setBackgroundColor(0, 0, 0);
 	for (i = 0; i < slices; i++) {
 		setSlice(i+1);
 		makeOval(getResult("x", i)-(CIRCLE_TAG_X/2), getResult("y", i),
@@ -322,7 +319,7 @@ function crop_and_project_to2D(img) {
 	selectWindow("dummy");
 	run("Select None");
 
-	// Get usable analysis area and save as .roi
+	// Get analysis area and save as .roi
 	selectWindow("dummy");
 	run("Reslice [/]...", "output=1.000 start=Top rotate");
 	close("dummy");
@@ -386,26 +383,7 @@ function crop_and_project_to2D(img) {
 	makeRectangle(0, yR, d2D_width, heightR);
 	run("Duplicate...", "duplicate");
 	close("fetch");	
-	rename("fetch");	
-	
-	// Filter in the FFT domain to eliminate horizontal line artefacts
-	run("FFT");
-	close("fetch");	
-	rename("fetch_fft");
-	getDimensions(w, h, ch, s, f);
-	r = sqrt((w/2)*(w/2)+(w/2)*(w/2));
-	makePolygon(w/2, w/2,
-		w/2+r*cos((90+THETA)*-(PI/180)),w/2+r*sin((90+THETA)*-(PI/180)),
-		1+w/2+r*cos((90-THETA)*-(PI/180)),w/2+r*sin((90-THETA)*-(PI/180)),
-		w/2+1,w/2,
-		1+w/2+r*cos((270+THETA)*-(PI/180)),w/2+r*sin((270+THETA)*-(PI/180)),
-		w/2+r*cos((270-THETA)*-(PI/180)),w/2+r*sin((270-THETA)*-(PI/180)),
-		w/2,w/2);
-	run("Clear");
-	run("Select None");
-	run("Inverse FFT");
-	close("fetch_fft");
-	rename("fetch_ifft");
+	rename("fetch");
 	
 	// remove BG
 	run("Gaussian Blur...", "sigma=1");
