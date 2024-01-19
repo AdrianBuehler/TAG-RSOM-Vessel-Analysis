@@ -1,6 +1,6 @@
 // This macro expects volumes from TAG-RSOM imaging in tif.format with a voxel
-// size of 20x20x4 µm^3 (XYZ). All volumes should be placed in one in a "source"
-// folder 
+// size of 20x20x4 µm^3 (XYZ) as input. All volumes should be placed in a "source"
+// folder.
 
 
 #@ File (style="directory", value="C:/recon") source
