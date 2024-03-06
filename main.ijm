@@ -132,8 +132,7 @@ function get_apex_coordinates(img){
   	close(img + FILT3D_IMG_SUF);
 	
 	// Side view for reference
-	run("Duplicate...", "duplicate");
-	rename("tmp");
+	run("Duplicate...", "title=tmp duplicate");
 	run("Reslice [/]...", "output=1.000 start=Right rotate");
 	close("tmp");
 	rename("tmp");
@@ -144,16 +143,14 @@ function get_apex_coordinates(img){
 	// Other frames showing segment MIPs
 	for (i = 0; i <= n-1; i++) {
 		selectImage("coronal_view");
-		run("Duplicate...",
-			"duplicate range="+ SEGMENT_SIZE*i+1 + "-" + SEGMENT_SIZE*(i+1));
-		rename("tmp");
+		run("Duplicate...", "title=tmp duplicate range="+
+			SEGMENT_SIZE*i+1 + "-" + SEGMENT_SIZE*(i+1));
 		run("Z Project...", "projection=[Max Intensity]");
 		close("tmp");
 		rename("current_Segment");
 		
 		selectImage("sideViewMIPtemplate");
-		run("Duplicate...", "duplicate");
-		rename("sideViewMIP");
+		run("Duplicate...", "title=sideViewMIP duplicate");
 		makeRectangle(SEGMENT_SIZE*i+1, 0, 2, height);
 		run("Fill", "slice");
 		makeRectangle(SEGMENT_SIZE*(i+1), 0, 2, height);
@@ -292,12 +289,11 @@ function crop_and_project_to2D(img) {
 	run("Reslice [/]...", "output=1.000 start=Left");
 	close("fetch");
 	rename("fetch");
-	run("Duplicate...", "duplicate range="
+	run("Duplicate...", "title=cropped_image duplicate range="
 		+ getResult("start", 0)*getResult("segsize", 0) + "-"
 		+ getResult("stop", 0)*getResult("segsize", 0)
 		+ getResult("segsize", 0)-1);		
 	close("fetch");
-	rename("cropped_image");
 	// Crop volume
 	getDimensions(width, height, channels, slices, frames);
 	// Apply to dummy to save presice outline (calculation internsive but works)
@@ -341,9 +337,8 @@ function crop_and_project_to2D(img) {
 	roiManager("Deselect");
 	roiManager("Delete");
 	makeRectangle(0, yR, d2D_width, d2D_height);
-	run("Duplicate...", "duplicate");
+	run("Duplicate...", "title=roi_template duplicate");
 	close("dummy2D");
-	rename("roi_template");
 	for (i = 0; i < 10; i++) {run("Erode");}
 	run("Create Selection");
 	roiManager("Add");
@@ -382,8 +377,6 @@ function crop_and_project_to2D(img) {
 	run("8-bit");
 	makeRectangle(0, yR, d2D_width, heightR);
 	run("Duplicate...", "duplicate");
-	close("fetch");	
-	rename("fetch");
 	
 	// remove BG
 	run("Gaussian Blur...", "sigma=1");
@@ -402,9 +395,8 @@ function segment(img) {
 		+ " dogauss=false spacingstring=[1, 1] scalestring=[2, 5]");
 	close(img + PREPROC_IMG_SUF);
 	rename("fetch");
-	run("Duplicate...", "duplicate range=1-1");
+	run("Duplicate...", "title=filtered duplicate range=1-1");
 	close("fetch");
-	rename("filtered");
 		
 	// Segmented
 	setOption("BlackBackground", true);
